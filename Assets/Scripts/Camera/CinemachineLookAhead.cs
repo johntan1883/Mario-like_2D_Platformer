@@ -21,7 +21,7 @@ public class CinemachineLookahead : MonoBehaviour
 
         // Initialize Dead Zone and Soft Zone
         framingTransposer.m_DeadZoneWidth = 0.1f;
-        framingTransposer.m_DeadZoneHeight = 0.4f;
+        framingTransposer.m_DeadZoneHeight = 0.3f;
         framingTransposer.m_SoftZoneWidth = 0.2f;
         framingTransposer.m_SoftZoneHeight = 0.3f;
     }
