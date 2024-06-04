@@ -19,16 +19,16 @@ public class PlayerAnimator : MonoBehaviour
     private void Update()
     {
         //Toggle the walking animation
-        animator.SetBool(IS_WALKING, player.IsWalking());
+        animator.SetBool(IS_WALKING, player.IsWalking);
 
         //Toggle the jump animation
-        if (player.IsJumping())
+        if (player.IsJumping == true)
         {
-            animator.SetBool(IS_JUMPING, player.IsJumping());
+            animator.SetBool(IS_JUMPING, player.IsJumping);
         }
         else
         {
-            animator.SetBool(IS_JUMPING, player.IsJumping());
+            animator.SetBool(IS_JUMPING, player.IsJumping);
         }
 
     }

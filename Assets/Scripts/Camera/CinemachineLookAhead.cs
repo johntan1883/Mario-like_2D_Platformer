@@ -30,7 +30,7 @@ public class CinemachineLookahead : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (player.IsWalking())
+        if (player.IsWalking == true)
         {
             if (horizontal > 0) // Moving right
             {

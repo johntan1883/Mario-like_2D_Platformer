@@ -6,8 +6,9 @@ public class Player : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float movingSpeed;
+    [SerializeField] private float sprintSpeed;
     [SerializeField] private float jumpForce = 5f;
-    private bool isJumping;
+    
 
     [Header("GroundCheck")]
     [SerializeField] private Vector2 boxSize;
@@ -17,19 +18,15 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rb;
     private float horizontal;
+    private float currentSpeed;
     private bool isFacingRight = true;
     private bool isWalking;
+    private bool isJumping;
+    private bool isSprinting;
 
-    //To check the player condition
-    public bool IsWalking()
-    {
-        return isWalking;
-    }
-
-    public bool IsJumping()
-    {
-        return isJumping;
-    }
+    // Properties to check player state
+    public bool IsWalking => isWalking;
+    public bool IsJumping => isJumping;
 
     private void Awake()
     {
@@ -38,18 +35,34 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-
+        Input();
         Flip();
-
-        GroundCheck();
         Jump();
+    }
+
+    private void Input()
+    {
+        horizontal = UnityEngine.Input.GetAxisRaw("Horizontal");
+
+        isSprinting = UnityEngine.Input.GetKey(KeyCode.LeftShift);
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * movingSpeed, rb.velocity.y);
+        Sprint();
+        GroundCheck();
+        
         isWalking = Mathf.Abs(horizontal) > 0.01f;
+    }
+
+    private void Sprint()
+    {
+        if (!isJumping)
+        {
+            currentSpeed = isSprinting ? sprintSpeed : movingSpeed;
+        }
+
+        rb.velocity = new Vector2(horizontal * currentSpeed, rb.velocity.y);
     }
 
     private void Flip()
@@ -80,7 +93,7 @@ public class Player : MonoBehaviour
     
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump") && !isJumping)
+        if (UnityEngine.Input.GetButtonDown("Jump") && !isJumping)
         {
             rb.AddForce(new Vector2(rb.velocity.x, jumpForce));
         }
