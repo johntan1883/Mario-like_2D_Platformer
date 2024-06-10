@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
-public class Snail : MonoBehaviour
+public class Beetle : MonoBehaviour, IEnemy
 {
-
     [SerializeField] private float movingSpeed;
     [SerializeField] private GameObject pointA;
     [SerializeField] private GameObject pointB;
@@ -13,7 +11,7 @@ public class Snail : MonoBehaviour
     private Rigidbody2D rb;
     private Transform currentPoint;
 
-    private void Start()
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
 
@@ -28,7 +26,7 @@ public class Snail : MonoBehaviour
         SwitchPoint();
     }
 
-    private void SwitchPoint()
+    public void SwitchPoint()
     {
         if (Vector2.Distance(transform.position, currentPoint.position) < 0.5f && currentPoint == pointB.transform)
         {
@@ -45,7 +43,7 @@ public class Snail : MonoBehaviour
         }
     }
 
-    private void MoveTowardPoint()
+    public void MoveTowardPoint()
     {
         Vector2 point = currentPoint.position - transform.position;
 
@@ -59,7 +57,7 @@ public class Snail : MonoBehaviour
         }
     }
 
-    private void Flip()
+    public void Flip()
     {
         Vector3 localScale = transform.localScale;
         localScale.x *= -1f;
@@ -74,4 +72,4 @@ public class Snail : MonoBehaviour
 
         Gizmos.DrawLine(pointA.transform.position, pointB.transform.position);
     }
-}   
+}
