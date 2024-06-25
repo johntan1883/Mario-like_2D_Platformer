@@ -16,6 +16,7 @@ public class CinemachineLookahead : MonoBehaviour
     void Start()
     {
         player = GameObject.FindObjectOfType<Player>();
+
         framingTransposer = virtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
         targetOffset = Vector3.zero;
 
@@ -28,6 +29,12 @@ public class CinemachineLookahead : MonoBehaviour
 
     void Update()
     {
+        if (player.IsDead)
+        {
+            // If the player is dead, do not update the lookahead offset
+            return;
+        }
+
         float horizontal = Input.GetAxisRaw("Horizontal");
 
         if (player.IsWalking == true)

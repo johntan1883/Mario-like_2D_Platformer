@@ -11,9 +11,14 @@ public class Beetle : MonoBehaviour, IEnemy
     [SerializeField] private float HitStompForce;
 
     [Header("Collison Check")]
-    [SerializeField] private float castDistance;
+    [SerializeField] private float hitBoxCastDistance;
+    [SerializeField] private float killBoxCastDistance;
     [SerializeField] private LayerMask hitLayer;
     [SerializeField] private Vector2 hitBoxSize;
+    [SerializeField] private Vector2 killBoxSize;
+
+    [Header("Player Reference")]
+    [SerializeField] private Player player;
 
     private Rigidbody2D rb;
     private Transform currentPoint;
@@ -84,25 +89,27 @@ public class Beetle : MonoBehaviour, IEnemy
 
     private void PlayerCollisionCheck()
     {
-        RaycastHit2D topHit = Physics2D.BoxCast(transform.position, hitBoxSize, 0, -transform.up, castDistance, hitLayer);
+        RaycastHit2D topHit = Physics2D.BoxCast(transform.position, hitBoxSize, 0, -transform.up, hitBoxCastDistance, hitLayer);
         if (topHit)
         {
             isWalking = false;
             HitStomp();
         }
 
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position, Vector2.left, castDistance, hitLayer);
+        // Check collision with player to the left of the beetle
+        Collider2D leftHit = Physics2D.OverlapBox(transform.position + Vector3.left * killBoxCastDistance, killBoxSize, 0, hitLayer);
         if (leftHit)
         {
-            //push the player away
-            //player health --
-            //player flash red
+            Debug.Log("Player Die");
+            player.PlayerDie();
         }
 
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position, Vector2.right, castDistance, hitLayer);
+        // Check collision with player to the right of the beetle
+        Collider2D rightHit = Physics2D.OverlapBox(transform.position + Vector3.right * killBoxCastDistance, killBoxSize, 0, hitLayer);
         if (rightHit)
         {
-            
+            Debug.Log("Player Die");
+            player.PlayerDie();
         }
     }
 
@@ -119,8 +126,14 @@ public class Beetle : MonoBehaviour, IEnemy
 
         Gizmos.DrawLine(pointA.transform.position, pointB.transform.position);
 
-        Gizmos.DrawWireCube(transform.position - transform.up * castDistance, hitBoxSize);
+        Gizmos.DrawWireCube(transform.position - transform.up * hitBoxCastDistance, hitBoxSize);
+
+        // Visualize the left and right overlap boxes
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position + Vector3.left * killBoxCastDistance, killBoxSize);
+        Gizmos.DrawWireCube(transform.position + Vector3.right * killBoxCastDistance, killBoxSize);
     }
+}
 
     
-}
+

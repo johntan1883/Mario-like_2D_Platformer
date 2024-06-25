@@ -17,6 +17,9 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     //private bool isGrounded;
 
+    [Header("Dead")]
+    [SerializeField] private PlayerDeathAnimation playerDeathAnimation;
+
     private Rigidbody2D rb;
     private float horizontal;
     private float currentSpeed;
@@ -24,10 +27,12 @@ public class Player : MonoBehaviour
     private bool isWalking;
     private bool isJumping;
     private bool isSprinting;
+    private bool isDead;
 
     // Properties to check player state
     public bool IsWalking => isWalking;
     public bool IsJumping => isJumping;
+    public bool IsDead => isDead;
 
     private void Awake()
     {
@@ -98,6 +103,24 @@ public class Player : MonoBehaviour
         {
             rb.AddForce(new Vector2(rb.velocity.x, jumpForce));
         }
+    }
+
+    public void PlayerDie()
+    {
+        isDead = true;
+
+        if (isDead)
+        {
+            playerDeathAnimation.enabled = true;
+            GetComponent<BoxCollider2D>().enabled = false;
+            StopMovement();
+        }
+    }
+
+    private void StopMovement()
+    {
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
     }
 
     //Visualize the casting box
