@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerDeathAnimation playerDeathAnimation;
 
     private Rigidbody2D rb;
+    private new Collider2D collider;
     private float horizontal;
     private float currentSpeed;
     private bool isFacingRight = true;
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        collider = GetComponent<Collider2D>();
     }
 
     private void Update()
@@ -121,6 +123,22 @@ public class Player : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
+    }
+
+    private void OnEnable()
+    {
+        rb.isKinematic = false;
+        collider.enabled = true;
+        rb.velocity = Vector2.zero;
+        isJumping = false;
+    }
+
+    private void OnDisable()
+    {
+        rb.isKinematic = true;
+        collider.enabled = false;
+        rb.velocity = Vector2.zero;
+        isJumping = false;
     }
 
     //Visualize the casting box
