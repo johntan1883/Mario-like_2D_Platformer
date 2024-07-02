@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Snail : MonoBehaviour, IEnemy
 {
@@ -13,13 +12,20 @@ public class Snail : MonoBehaviour, IEnemy
     [SerializeField] private float HitStompForce;
 
     [Header("Collison Check")]
-    [SerializeField] private float castDistance;
+    [SerializeField] private float hitBoxCastDistance;
+    [SerializeField] private float killBoxCastDistance;
     [SerializeField] private LayerMask hitLayer;
     [SerializeField] private Vector2 hitBoxSize;
+    [SerializeField] private Vector2 killBoxSize;
+
+    [Header("SFX")]
+    [SerializeField] private AudioClip stompSFX;
 
     private Rigidbody2D rb;
+    private Player player;
     private Transform currentPoint;
     private bool isWalking = true;
+    private bool isStomped = false;
 
     // Properties to check enemy state
     public bool IsWalking => isWalking;
@@ -27,6 +33,8 @@ public class Snail : MonoBehaviour, IEnemy
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        player = FindAnyObjectByType<Player>();
 
         //Initial destination
         currentPoint = pointA.transform;
@@ -87,40 +95,55 @@ public class Snail : MonoBehaviour, IEnemy
 
     private void PlayerCollisionCheck()
     {
-        RaycastHit2D topHit = Physics2D.BoxCast(transform.position, hitBoxSize, 0, -transform.up, castDistance, hitLayer);
-        if (topHit)
+        if (!isStomped)
         {
-            isWalking = false;
-            HitStomp();
-        }
+            RaycastHit2D topHit = Physics2D.BoxCast(transform.position, hitBoxSize, 0, -transform.up, hitBoxCastDistance, hitLayer);
+            if (topHit)
+            {
+                isWalking = false;
+                HitStomp();
+            }
 
-        RaycastHit2D leftHit = Physics2D.Raycast(transform.position, Vector2.left, castDistance, hitLayer);
-        if (leftHit)
-        {
-            //push the player away
-            //player health --
-            //player flash red
-        }
 
-        RaycastHit2D rightHit = Physics2D.Raycast(transform.position, Vector2.right, castDistance, hitLayer);
-        if (rightHit)
-        {
+            // Check collision with player to the left of the beetle
+            Collider2D leftHit = Physics2D.OverlapBox(transform.position + Vector3.left * killBoxCastDistance, killBoxSize, 0, hitLayer);
+            if (leftHit)
+            {
+                Debug.Log("Player Die");
+                player.PlayerDie();
+            }
 
+            // Check collision with player to the right of the beetle
+            Collider2D rightHit = Physics2D.OverlapBox(transform.position + Vector3.right * killBoxCastDistance, killBoxSize, 0, hitLayer);
+            if (rightHit)
+            {
+                Debug.Log("Player Die");
+                player.PlayerDie();
+            }
         }
     }
 
     private void HitStomp()
     {
         playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, HitStompForce);
+
+        SoundFXManager.Instance.PlaySoundFXClip(stompSFX, transform, 1f, "SFX");
+
+        isStomped = true;
     }
 
-    //Visualize the patrol path of the enemy
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(pointA.transform.position, 0.5f);
         Gizmos.DrawWireSphere(pointB.transform.position, 0.5f);
 
         Gizmos.DrawLine(pointA.transform.position, pointB.transform.position);
-        Gizmos.DrawWireCube(transform.position - transform.up * castDistance, hitBoxSize);
+
+        Gizmos.DrawWireCube(transform.position - transform.up * hitBoxCastDistance, hitBoxSize);
+
+        // Visualize the left and right overlap boxes
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position + Vector3.left * killBoxCastDistance, killBoxSize);
+        Gizmos.DrawWireCube(transform.position + Vector3.right * killBoxCastDistance, killBoxSize);
     }
 }   

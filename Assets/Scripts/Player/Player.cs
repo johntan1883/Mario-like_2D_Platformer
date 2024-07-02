@@ -20,8 +20,13 @@ public class Player : MonoBehaviour
     [Header("Dead")]
     [SerializeField] private PlayerDeathAnimation playerDeathAnimation;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip jumpSFX;
+    [SerializeField] private AudioClip dieSFX;
+
     private Rigidbody2D rb;
     private new Collider2D collider;
+    private GameOverScreen gameOverScreen;
     private float horizontal;
     private float currentSpeed;
     private bool isFacingRight = true;
@@ -39,6 +44,8 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
+
+        gameOverScreen = FindAnyObjectByType<GameOverScreen>();
     }
 
     private void Update()
@@ -104,6 +111,8 @@ public class Player : MonoBehaviour
         if (UnityEngine.Input.GetButtonDown("Jump") && !isJumping)
         {
             rb.AddForce(new Vector2(rb.velocity.x, jumpForce));
+
+            SoundFXManager.Instance.PlaySoundFXClip(jumpSFX, transform, 1f, "SFX");
         }
     }
 
@@ -116,6 +125,10 @@ public class Player : MonoBehaviour
             playerDeathAnimation.enabled = true;
             GetComponent<BoxCollider2D>().enabled = false;
             StopMovement();
+            SoundFXManager.Instance.StopBackgroundMusic();
+            SoundFXManager.Instance.PlaySoundFXClip(dieSFX, transform, 1f, "SFX");
+            gameOverScreen.GameOver();
+
         }
     }
 

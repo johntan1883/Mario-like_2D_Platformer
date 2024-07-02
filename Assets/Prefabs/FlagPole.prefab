@@ -95,10 +95,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flag: {fileID: 3289509407442318590}
-  poleBottom: {fileID: 1378206192150366149}
+  poleBottom: {fileID: 5334244472832595034}
   marioBottom: {fileID: 1378206192150366149}
   castleEntrance: {fileID: 0}
   speed: 5
+  flagPoleSFX: {fileID: 8300000, guid: 0ee40f96da9b20a40834c196b519aafd, type: 3}
+  levelClearSFX: {fileID: 8300000, guid: a3fd7264cc70bc348901f6b46c96ba92, type: 3}
 --- !u!1 &5147376938639368417
 GameObject:
   m_ObjectHideFlags: 0

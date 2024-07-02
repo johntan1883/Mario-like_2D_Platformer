@@ -124,11 +124,14 @@ MonoBehaviour:
   pointB: {fileID: 7540310088892155990}
   playerRigidBody: {fileID: 0}
   HitStompForce: 7
-  castDistance: -0.34
+  hitBoxCastDistance: -0.41
+  killBoxCastDistance: -0.55
   hitLayer:
     serializedVersion: 2
     m_Bits: 128
-  hitBoxSize: {x: 0.76, y: 0.26}
+  hitBoxSize: {x: 0.62, y: 0.12}
+  killBoxSize: {x: 0.16, y: 0.62}
+  stompSFX: {fileID: 0}
 --- !u!1 &1847494471128549350
 GameObject:
   m_ObjectHideFlags: 0

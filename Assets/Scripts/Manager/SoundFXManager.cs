@@ -6,7 +6,11 @@ public class SoundFXManager : MonoBehaviour
 {
     public static SoundFXManager Instance;
 
+    [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource soundFXObject;
+
+    [Header("Background Music")]
+    [SerializeField] private AudioClip backgroundMusic;
 
     private void Awake()
     {
@@ -14,6 +18,12 @@ public class SoundFXManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    private void Start()
+    {
+        musicSource.clip = backgroundMusic;
+        musicSource.Play();
     }
 
     public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume, string sfxObjectTag)
@@ -30,6 +40,7 @@ public class SoundFXManager : MonoBehaviour
         //ASSIGN TAG FOR THE SFX OBJ
         audioSource.gameObject.tag = sfxObjectTag;
 
+
         //PLAY SOUND
         audioSource.Play();
 
@@ -38,5 +49,21 @@ public class SoundFXManager : MonoBehaviour
 
         //DESTROY THE CLIP AFTER IT IS DONE PLAYING
         Destroy(audioSource.gameObject, clipLength);
+    }
+
+
+    public void StopBackgroundMusic()
+    {
+        musicSource.Stop();
+    }
+
+    public void PauseBackgroundMusic()
+    {
+        musicSource.Pause();
+    }
+
+    public void ResumeBackgroundMusic()
+    {
+        musicSource.UnPause();
     }
 }

@@ -7,7 +7,7 @@ public class Beetle : MonoBehaviour, IEnemy
     [SerializeField] private float movingSpeed;
     [SerializeField] private GameObject pointA;
     [SerializeField] private GameObject pointB;
-    [SerializeField] private Rigidbody2D playerRigidBody;
+    
     [SerializeField] private float HitStompForce;
 
     [Header("Collison Check")]
@@ -17,8 +17,11 @@ public class Beetle : MonoBehaviour, IEnemy
     [SerializeField] private Vector2 hitBoxSize;
     [SerializeField] private Vector2 killBoxSize;
 
-    [Header("Player Reference")]
-    [SerializeField] private Player player;
+    [Header("SFX")]
+    [SerializeField] private AudioClip stompSFXBeetle;
+
+    private Player player;
+    private Rigidbody2D playerRigidBody;
 
     private Rigidbody2D rb;
     private Transform currentPoint;
@@ -30,6 +33,10 @@ public class Beetle : MonoBehaviour, IEnemy
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        player = FindAnyObjectByType<Player>();
+
+        playerRigidBody = player.gameObject.GetComponent<Rigidbody2D>();
 
         //Initial destination
         currentPoint = pointA.transform;
@@ -116,6 +123,8 @@ public class Beetle : MonoBehaviour, IEnemy
     private void HitStomp()
     {
         playerRigidBody.velocity = new Vector2(playerRigidBody.velocity.x, HitStompForce);
+
+        SoundFXManager.Instance.PlaySoundFXClip(stompSFXBeetle, transform, 1f, "SFX");
     }
 
     //Visualize the patrol path of the enemy

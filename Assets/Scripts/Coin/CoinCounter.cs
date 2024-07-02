@@ -13,7 +13,7 @@ public class CoinCounter : MonoBehaviour
     public void AddCoin()
     {
         coinCount += 1;
-        SoundFXManager.Instance.PlaySoundFXClip(coinCollectSFX, transform, 0.1f, "SFX");
+        SoundFXManager.Instance.PlaySoundFXClip(coinCollectSFX, transform, 1f, "SFX");
         if (coinCount > 99)
         {
             coinCount -= 100;

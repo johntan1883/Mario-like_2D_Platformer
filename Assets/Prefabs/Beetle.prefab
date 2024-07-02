@@ -340,7 +340,6 @@ MonoBehaviour:
   movingSpeed: 1.5
   pointA: {fileID: 3919786869497864671}
   pointB: {fileID: 5613996387173239875}
-  playerRigidBody: {fileID: 0}
   HitStompForce: 7
   hitBoxCastDistance: -0.35
   killBoxCastDistance: -0.49
@@ -349,4 +348,4 @@ MonoBehaviour:
     m_Bits: 128
   hitBoxSize: {x: 0.85, y: 0.1}
   killBoxSize: {x: 0.21, y: -0.47}
-  player: {fileID: 0}
+  stompSFXBeetle: {fileID: 8300000, guid: 40ffa5b9569acd4448023ccd945a2577, type: 3}
